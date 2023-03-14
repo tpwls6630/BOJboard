@@ -17,7 +17,7 @@ using namespace std;
 
 int r, c;
 vector<vector<pair<int,int>>> parent;
-vector<vector<long long>> balls, height;
+vector<vector<int>> balls, height;
 
 pair<int, int> Find(pair<int, int> x) {
     if (parent[x.first][x.second] == pair<int,int>{-1,-1}) return x;
@@ -38,8 +38,8 @@ int main() {
 
     cin >> r >> c;
     parent = vector<vector<pair<int, int>>>(r, vector<pair<int, int>>(c, { -1,-1 }));
-    balls = vector<vector<long long>>(r, vector<long long>(c, 1));
-    height = vector<vector<long long>>(r, vector<long long>(c, 0));
+    balls = vector<vector<int>>(r, vector<int>(c, 1));
+    height = vector<vector<int>>(r, vector<int>(c, 0));
 
     FOR(i, r) {
         FOR(j, c) {
@@ -51,7 +51,7 @@ int main() {
     vector<pair<int, int>> D = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };
     FOR(i, r) {
         FOR(j, c) {
-            int ex = i, ey = j; long long m = 0;
+            int ex = i, ey = j; int m = 0;
             for (auto d : D) {
                 int ni = i + d.first, nj = j + d.second;
                 if (ni < 0 || ni > r - 1 || nj<0 || nj >c - 1) continue;
