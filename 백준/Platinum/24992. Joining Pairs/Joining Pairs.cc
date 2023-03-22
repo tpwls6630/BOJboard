@@ -45,23 +45,21 @@ int main() {
 
 	cin >> w >> h >> n;
 
-	map<int, int> bor;
+	vector<pair<int,int>> bor;
 	FOR(i, n) {
 		int x1, y1, x2, y2;
 		cin >> x1 >> y1 >> x2 >> y2;
 		int b1 = border(x1, y1), b2 = border(x2, y2);
 		if (b1 == INT_MAX || b2 == INT_MAX) continue;
-		bor.insert({ b1,i });
-		bor.insert({ b2,i });
+		bor.push_back({ b1,i });
+		bor.push_back({ b2,i });
 	}
 
+	sort(all(bor));
 	stack<int> bracket;
 
 	for (auto iter = bor.begin(); iter != bor.end(); iter++) {
-		if (!bracket.empty()) {
-			if (bracket.top() == iter->second) { bracket.pop(); }
-			else bracket.push(iter->second);
-		}
+		if (!bracket.empty() && bracket.top() == iter->second) { bracket.pop(); }
 		else bracket.push(iter->second);
 	}
 
