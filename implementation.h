@@ -65,7 +65,10 @@ public:
 	}
 
 	void update(const unsigned int target, const T value) {
-
+		if(target > C) {
+			cout << "	Invalid update query : segmentation fault\n";
+			return;
+		}
 		unsigned int idx = C + target - 1;
 		seg[idx] = value;
 		while (idx >>= 1) 
