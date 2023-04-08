@@ -1,0 +1,7 @@
+#ignored files
+
+main.cpp
+
+.vscode/
+main.exe
+
