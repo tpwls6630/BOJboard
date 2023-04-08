@@ -34,12 +34,7 @@ private:
 		return operationFunction(lq, rq);
 
 	}
-public:
-	
-	segtree() : size_t(0), C(0) {}
-	segtree(const unsigned int _size, const std::vector<T>& _initialValue, T (*_operationFunction)(const T&, const T&), const T _identityElement = T()) {
-		build(_size, _initialValue, _operationFunction, _identityElement);
-	}
+
 	void build(const unsigned int _size, const std::vector<T>& _initialValue, T (*_operationFunction)(const T&, const T&), const T _identityElement) {
 
 		size_t = _size;
@@ -56,9 +51,15 @@ public:
 		
 	}
 
+public:
+	
+	segtree() : size_t(0), C(0) {}
+	segtree(const unsigned int _size, const std::vector<T>& _initialValue, T (*_operationFunction)(const T&, const T&), const T _identityElement = T()) {
+		build(_size, _initialValue, _operationFunction, _identityElement);
+	}
 	T query(unsigned int q_left, unsigned int q_right) { // [q_left, q_right)
 
-		if (q_left > q_right) return seg[0];
+		if (q_left > q_right) return seg[0];			// invalid query
 		return pQuery(q_left, q_right, 1, C, 1);
 
 	}
