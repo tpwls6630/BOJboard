@@ -16,7 +16,7 @@ private:
 	T(*operationFunction)(const T& a, const T& b);	// monoid operator defined on (T, T) -> T
 
 	const unsigned int mybit_ceil(const unsigned int x) { // bit_ceil (eg. 0110 -> 1000) // x < 2^31 
-
+		if(x == 1) return 1;
 		unsigned int ret = 1 << 31;
 		while (ret >= x && ret) 
 			ret >>= 1;
