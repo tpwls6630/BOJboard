@@ -120,7 +120,7 @@ void segtree<T>::update(const unsigned int target, const T value) {
 template<typename T>
 T segtree<T>::get(const unsigned int target){
 	try{
-		if(target < 0 || target >= size_t){
+		if(target < 0 || target > size_t){
 			throw target;
 		}
 		return seg[C + target - 1];
