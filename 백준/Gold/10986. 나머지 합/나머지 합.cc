@@ -18,22 +18,19 @@ int main() {
 
 	int n, m;
 	cin >> n >> m;
-	vector<int> remains(n);
-	vector<int> asum(n, 0);
+	int asum = 0;
+	vector<int> cnt(m, 0);
 	FOR(i, n) {
-		cin >> remains[i];
-		remains[i] %= m;
-		if (i == 0) asum[0] = remains[0];
-		else asum[i] = (asum[i - 1] + remains[i]) % m;
+		int temp;
+		cin >> temp;
+		asum = (asum + temp) % m;
+		++cnt[asum];
 	}
-	vector<ll> cnt(m, 0);
-	FOR(i, n) {
-		++cnt[asum[i]];
-	}
+
 	ll ans = 0;
-	ans += (cnt[0] * (cnt[0] + 1)) / 2;
+	ans += ((ll)cnt[0] * (cnt[0] + 1)) / 2;
 	for (int r = 1; r < m; r++) {
-		ans += (cnt[r] * (cnt[r] - 1)) / 2;
+		ans += ((ll)cnt[r] * (cnt[r] - 1)) / 2;
 	}
 	cout << ans;
 
