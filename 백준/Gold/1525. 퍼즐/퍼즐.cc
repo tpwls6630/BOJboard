@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <set>
+
 #define all(x) x.begin(), x.end()
 #define FOR(X,N) for(int X = 0; X < N; ++X)
 #define FOR1(X,N) for(int X = 1; X <= N; ++X)
@@ -24,49 +24,49 @@ void factoInit() {
 		facto[i] = facto[i - 1] * i;
 	}
 }
-//int permuToIdx(int permutation) {
-//	// 123456789 => 0
-//	// 987654321 => 9! - 1
-//	// 468192357 => 3 x 8! + 4 x 7! + 5 x 6! + 0 x 5! + 4 x 4! + 0 x 3! + 0 x 2! + 0 x 1! + 0 x 0! = 144816
-//	int arr[9] = { 0, }, lessRight[9] = { 0, };
-//	for (int idx = 8; idx >= 0; idx--) {
-//		arr[idx] = permutation % 10;
-//		permutation /= 10;
-//	}
-//	for (int i = 0; i < 9; i++) {
-//		for (int j = i + 1; j < 9; j++) {
-//			if (arr[i] > arr[j]) ++lessRight[i];
-//		}
-//	}
-//	int ret = 0;
-//	FOR(i, 9) {
-//		ret += facto[8 - i] * lessRight[i];
-//	}
-//
-//	return ret;
-//}
-//int idxToPermu(int idx) {
-//	// 1 => 123456789
-//	// 9! => 987654321
-//	// 144816 => 468192357
-//	bool ocupied[10] = { 0, };
-//	ll ret = 0;
-//	FOR(i, 9) {
-//		int ri = 8 - i;
-//		int r = idx / facto[ri] + 1, cnt = 0;
-//		for (int i = 1; i <= 9; i++) {
-//			if (ocupied[i] == false) cnt++;
-//			if (r == cnt) {
-//				ocupied[i] = true;
-//				ret += i;
-//				break;
-//			}
-//		}
-//		idx -= facto[ri] * (r - 1);
-//		if(i < 8) ret *= 10;
-//	}
-//	return ret;
-//}
+int permuToIdx(int permutation) {
+	// 123456789 => 0
+	// 987654321 => 9! - 1
+	// 468192357 => 3 x 8! + 4 x 7! + 5 x 6! + 0 x 5! + 4 x 4! + 0 x 3! + 0 x 2! + 0 x 1! + 0 x 0! = 144816
+	int arr[9] = { 0, }, lessRight[9] = { 0, };
+	for (int idx = 8; idx >= 0; idx--) {
+		arr[idx] = permutation % 10;
+		permutation /= 10;
+	}
+	for (int i = 0; i < 9; i++) {
+		for (int j = i + 1; j < 9; j++) {
+			if (arr[i] > arr[j]) ++lessRight[i];
+		}
+	}
+	int ret = 0;
+	FOR(i, 9) {
+		ret += facto[8 - i] * lessRight[i];
+	}
+
+	return ret;
+}
+int idxToPermu(int idx) {
+	// 1 => 123456789
+	// 9! => 987654321
+	// 144816 => 468192357
+	bool ocupied[10] = { 0, };
+	ll ret = 0;
+	FOR(i, 9) {
+		int ri = 8 - i;
+		int r = idx / facto[ri] + 1, cnt = 0;
+		for (int i = 1; i <= 9; i++) {
+			if (ocupied[i] == false) cnt++;
+			if (r == cnt) {
+				ocupied[i] = true;
+				ret += i;
+				break;
+			}
+		}
+		idx -= facto[ri] * (r - 1);
+		if(i < 8) ret *= 10;
+	}
+	return ret;
+}
 inline vector<vector<int>> permuToBoard(int permutation) {
 	vector<vector<int>> ret(3, vector<int>(3, 0));
 	for (int i = 8; i >= 0; i--) {
@@ -107,20 +107,21 @@ vector<int> nextPermutation(int permutation) {
 
 int solution(int startPermutation) {
 
-	set<int> visited;
+	vector<bool> visited(facto[8] * 9, false);
 	queue<pii> bfs;
 
 	bfs.push({ startPermutation, 0 });
-	visited.insert(startPermutation);
+	visited[permuToIdx(startPermutation)];
 	while (!bfs.empty()) {
 		auto [cur, depth] = bfs.front(); bfs.pop();
 		if (cur == 123456789) {
 			return depth;
 		}
 		for (auto next : nextPermutation(cur)) {
-			if (visited.find(next) == visited.end()) {
+			int idx = permuToIdx(next);
+			if (!visited[idx]) {
 				bfs.push({ next, depth + 1 });
-				visited.insert(next);
+				visited[idx] = true;
 			}
 		}
 	}
