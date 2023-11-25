@@ -12,7 +12,7 @@ long long solution(){
     cin >> n>>k;
 
     vector<long long> weight(n + 1), dist(n+1, 0);
-    vector<vector<bool>> edge(n+1, vector<bool>(n+1, false));
+    vector<vector<int>> edge(n+1, vector<int>());
     vector<int> indegree(n+1, 0);
 
     FOR(i, n){
@@ -22,7 +22,7 @@ long long solution(){
         int X, Y;
         cin >> X>>Y;
         indegree[Y]++;
-        edge[X][Y] = true;
+        edge[X].push_back(Y);
     }
     cin >> endNode;
 
@@ -37,12 +37,13 @@ long long solution(){
     while(!topo.empty()){
         int cur = topo.front(); topo.pop();
 
-        for(int i = 1; i <= n; i++){
-            if(edge[cur][i]){
-                indegree[i]--;
-                dist[i] = max(dist[i], dist[cur] + weight[i]);
-                if(indegree[i] == 0) topo.push(i);
-            }
+        if(cur == endNode) break;
+        for(int i : edge[cur]){
+
+            indegree[i]--;
+            dist[i] = max(dist[i], dist[cur] + weight[i]);
+            if(indegree[i] == 0) topo.push(i);
+            
         }
     }
 
