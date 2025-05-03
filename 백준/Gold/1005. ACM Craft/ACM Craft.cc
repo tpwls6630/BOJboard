@@ -2,61 +2,79 @@
 #include <vector>
 #include <array>
 #include <queue>
+#include <algorithm>
+#include <cmath>
+#include <stack>
+#include "stdlib.h"
 using namespace std;
+#define FOR(_i, _x) for (int _i = 0; _i < _x; _i++)
+// 위상정렬, 그래프 탐색(bfs)
+int solution()
+{
+    int n, k, target;
+    cin >> n >> k;
+    vector<int> time(n + 1);
+    vector<int> indegree(n + 1, 0);
+    vector<vector<int>> edge(n + 1);
 
-#define INF 5'000'000'000'000
-#define FOR(i, x) for(int i = 0; i < x; i++)
-
-long long solution(){
-    int n,k,endNode;
-    cin >> n>>k;
-
-    vector<long long> weight(n + 1), dist(n+1, 0);
-    vector<vector<int>> edge(n+1, vector<int>());
-    vector<int> indegree(n+1, 0);
-
-    FOR(i, n){
-        cin >> weight[i+1];
+    FOR(i, n)
+    {
+        cin >> time[i + 1];
     }
-    FOR(i,k){
-        int X, Y;
-        cin >> X>>Y;
-        indegree[Y]++;
-        edge[X].push_back(Y);
-    }
-    cin >> endNode;
 
-    queue<int> topo;
-    for(int i = 1; i <= n; i++){
-        if(indegree[i] == 0) {
-            topo.push(i);
-            dist[i] = weight[i];
+    FOR(i, k)
+    {
+        int a, b;
+        cin >> a >> b;
+        edge[a].push_back(b);
+        indegree[b]++;
+    }
+
+    cin >> target;
+
+    // 위상정렬
+    queue<int> q;
+    vector<int> result(n + 1, 0);
+    for (int i = 1; i <= n; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+            result[i] = time[i];
         }
     }
 
-    while(!topo.empty()){
-        int cur = topo.front(); topo.pop();
+    while (!q.empty())
+    {
+        int cur = q.front();
+        int cur_time = result[cur];
+        q.pop();
 
-        if(cur == endNode) break;
-        for(int i : edge[cur]){
-
-            indegree[i]--;
-            dist[i] = max(dist[i], dist[cur] + weight[i]);
-            if(indegree[i] == 0) topo.push(i);
-            
+        for (int next : edge[cur])
+        {
+            result[next] = max(result[next], cur_time + time[next]);
+            if (--indegree[next] == 0)
+            {
+                q.push(next);
+            }
         }
     }
 
-    return dist[endNode];
+    return result[target];
 }
-int main(){
-    ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
 
-    int T;
-    cin>>T;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-    while(T--){
-        cout << solution() << "\n";
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        cout << solution() << '\n';
     }
+
     return 0;
 }
